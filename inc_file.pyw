@@ -1,20 +1,30 @@
 from sys import argv
-from os.path import splitext, basename
+import os
+import re
 import datetime
 import shutil
 
 
+FILENAME_PATTERN = re.compile(r'(?:\d+ .+ \d{4})\Z')
+
+
 def clean_name(file_path):
-    base = basename(file_path)
+    ''' Take a given path and seperate the path, basename, and extension '''
+    base = os.path.basename(file_path)
     path = file_path[:-len(base)]
-    (filename, extension) = splitext(base)
+    (filename, extension) = os.path.splitext(base)
     return (path, filename, extension)
+
+
+def is_formatted(filename):
+    ''' Check if the filename is already formatted with version and date '''
+    return FILENAME_PATTERN.match(filename)
 
 
 def increment(file_path):
     (path, filename, extension) = clean_name(file_path)
 
-    if filename.count(' ') > 1:
+    if is_formatted(filename):
         try:
             version = int(filename[:filename.index(' ')]) + 1
             old_date = int(filename[filename.rindex(' ') + 1:])
