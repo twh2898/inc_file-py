@@ -34,13 +34,13 @@ def increment_filename(file_path):
     matches = FILENAME_PATTERN.match(filename)
 
     if matches and len(matches.groups()) == 2:
-        version = matches.group(0)
-        filename = matches.group(1)
+        version = int(matches.group(1)) + 1
+        filename = matches.group(2)
     else:
         version = 1
 
     date = datetime.date.today().strftime("%m%d")
-    return "%s%d %s %s%s" % (path, version, filename, date, extension)
+    return '%s%d %s %s%s' % (path, version, filename, date, extension)
 
 
 def main():

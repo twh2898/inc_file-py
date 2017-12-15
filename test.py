@@ -1,5 +1,6 @@
 import unittest
 import inc_file
+import datetime
 
 
 class IncFileTest(unittest.TestCase):
@@ -24,6 +25,27 @@ class IncFileTest(unittest.TestCase):
         self.assertFalse(inc_file.is_formatted('file name 0123'))
         self.assertFalse(inc_file.is_formatted('file name'))
         self.assertFalse(inc_file.is_formatted('filename'))
+
+    def test_increment_filename(self):
+        ''' Test the increment_filename function '''
+        date = datetime.date.today().strftime("%m%d")
+        self.assertEqual('C:\\path\\to\\2 file name %s.txt' % date,
+                         inc_file.increment_filename("C:\\path\\to\\1 file name 0123.txt"))
+        self.assertEqual('C:\\path\\to\\1 file name %s.txt' % date,
+                         inc_file.increment_filename("C:\\path\\to\\file name.txt"))
+        self.assertEqual('C:\\path\\to\\1 1 file name %s.txt' % date,
+                         inc_file.increment_filename("C:\\path\\to\\1 file name.txt"))
+        self.assertEqual('C:\\path\\to\\1 file name 0123 %s.txt' % date,
+                         inc_file.increment_filename("C:\\path\\to\\file name 0123.txt"))
+
+        self.assertEqual('C:\\path\\to\\2 filename %s.txt' % date,
+                         inc_file.increment_filename("C:\\path\\to\\1 filename 0123.txt"))
+        self.assertEqual('C:\\path\\to\\1 filename %s.txt' % date,
+                         inc_file.increment_filename("C:\\path\\to\\filename.txt"))
+        self.assertEqual('C:\\path\\to\\1 1 filename %s.txt' % date,
+                         inc_file.increment_filename("C:\\path\\to\\1 filename.txt"))
+        self.assertEqual('C:\\path\\to\\1 filename 0123 %s.txt' % date,
+                         inc_file.increment_filename("C:\\path\\to\\filename 0123.txt"))
 
 
 if __name__ == '__main__':
